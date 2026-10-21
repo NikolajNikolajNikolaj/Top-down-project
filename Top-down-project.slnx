@@ -1,2 +1,6 @@
 ﻿<Solution>
+<<<<<<< HEAD
+=======
+  <Project Path="Assembly-CSharp.csproj" />
+>>>>>>> 80193f7b532acb411fac4ddaed19a1ca1a38053e
 </Solution>
