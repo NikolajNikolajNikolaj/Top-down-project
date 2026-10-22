@@ -17,7 +17,6 @@ public class PlayerManager : MonoBehaviour
 
     //public PlayerAudioController playerAudio; // 
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -30,13 +29,12 @@ public class PlayerManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    { // -Y = fowerd    y =  up 
         if(movementbrecshen != Vector2.zero)// checking if movment isint 0
         {
-            animator.SetBool("Walking",true); // starts Walking animaton
+            //animator.SetBool("Walking",true); // starts Walking animaton
             
             //playerAudio.PlayerWalkingAudio(true);
-
             if (movementbrecshen.x < 0)
             {
                 playerSpriteRenderer.flipX = true; // fliping sprith
@@ -47,7 +45,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
         else{
-            animator.SetBool("Walking",false); //ending Walking animaton
+            //animator.SetBool("Walking",false); //ending Walking animaton
             //playerAudio.PlayerWalkingAudio(false);
         }
     }
@@ -63,8 +61,9 @@ public class PlayerManager : MonoBehaviour
 
     void OnAttack(){
         if(movementbrecshen == Vector2.zero){
-            animator.SetTrigger("Attack"); // attack
+            //animator.SetTrigger("Attack"); // attack
             //playerAudio.PlayAttackAudio();
         }
     }
+
 }

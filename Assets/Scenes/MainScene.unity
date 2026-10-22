@@ -26071,6 +26071,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &756126507
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 756126508}
+  m_Layer: 0
+  m_Name: PlayerMovePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &756126508
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756126507}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1983151585}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1182425490
 GameObject:
   m_ObjectHideFlags: 0
@@ -53166,7 +53197,7 @@ GameObject:
   - component: {fileID: 1394404380}
   - component: {fileID: 1394404379}
   - component: {fileID: 1394404381}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: colishen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58164,7 +58195,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!156049354 &1958588967
 Grid:
   m_ObjectHideFlags: 0
@@ -58205,9 +58236,8 @@ GameObject:
   - component: {fileID: 1983151584}
   - component: {fileID: 1983151586}
   - component: {fileID: 1983151590}
-  - component: {fileID: 1983151589}
-  - component: {fileID: 1983151588}
   - component: {fileID: 1983151587}
+  - component: {fileID: 1983151591}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -58284,11 +58314,12 @@ Transform:
   m_GameObject: {fileID: 1983151583}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 519420032}
+  - {fileID: 756126508}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1983151586
@@ -58340,49 +58371,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1983151588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983151583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51acfb28c5ed7f34087f2730d4327593, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  playerSpeed: 5
---- !u!114 &1983151589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983151583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: 
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!70 &1983151590
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -58420,6 +58408,24 @@ CapsuleCollider2D:
   m_Offset: {x: -0.00000008027663, y: -0.6734092}
   m_Size: {x: 0.5, y: 0.15319456}
   m_Direction: 1
+--- !u!114 &1983151591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983151583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80db6e969788c6644b0a622080700835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridPlayerMovment
+  movespeed: 5
+  movePoint: {fileID: 756126508}
+  whatStopsMovement:
+    serializedVersion: 2
+    m_Bits: 8
+  anim: {fileID: 0}
 --- !u!1 &1990115195
 GameObject:
   m_ObjectHideFlags: 0
@@ -59709,7 +59715,7 @@ GameObject:
   - component: {fileID: 2141584273}
   - component: {fileID: 2141584272}
   - component: {fileID: 2141584271}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: colishen frunt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
