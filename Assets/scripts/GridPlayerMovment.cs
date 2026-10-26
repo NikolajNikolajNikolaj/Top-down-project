@@ -17,6 +17,10 @@ public class GridPlayerMovment : MonoBehaviour
     private char Derecshen = 'f';
     private bool Iam_i_moving = false;
 
+    private bool idel_checkt = false;
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -36,23 +40,11 @@ public class GridPlayerMovment : MonoBehaviour
         anim.SetBool("run_B", false);
         anim.SetBool("run_f", false);
     }
-    
-    // Update is called once per frame
-    void Update()
+
+    private void sed_idel_derecshn()
     {
-        float horizontal = 0f;
-        float vertical = 0f;
-
-        // Reset movement flag if we have arrived exactly at the move point
-        if (transform.position == movePoint.position)
-        {
-            Iam_i_moving = false;
-        }
-
-        // Idle animation logic when stationary
-        if (transform.position == movePoint.position && !Iam_i_moving) 
-        { 
-            if (Derecshen == 'f' && !anim.GetBool("idal_f")) 
+        Debug.Log("checking idel");
+        if (Derecshen == 'f' && !anim.GetBool("idal_f")) 
             {
                 playerSpriteRenderer.flipX = false;
                 ResetAllAnimationBools();
@@ -75,7 +67,29 @@ public class GridPlayerMovment : MonoBehaviour
                 playerSpriteRenderer.flipX = false;
                 ResetAllAnimationBools();
                 anim.SetBool("idal_LR", true);
-            } 
+            }
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        float horizontal = 0f;
+        float vertical = 0f;
+
+        // Reset movement flag if we have arrived exactly at the move point
+        if (transform.position == movePoint.position)
+        {
+            Iam_i_moving = false;
+        }
+
+        // Idle animation logic when stationary
+        if (transform.position == movePoint.position && !Iam_i_moving) 
+        {
+            if (!idel_checkt)
+            {
+                idel_checkt = true;
+                sed_idel_derecshn();
+            }
         }
 
         // if idel you can interact
@@ -113,6 +127,7 @@ public class GridPlayerMovment : MonoBehaviour
 
                 Left_true = false;
                 Iam_i_moving = true;
+                idel_checkt = false;
 
                 Derecshen = 'r';
                 playerSpriteRenderer.flipX = false;
@@ -132,6 +147,7 @@ public class GridPlayerMovment : MonoBehaviour
 
                 Left_true = true;
                 Iam_i_moving = true;
+                idel_checkt = false;
 
                 Derecshen = 'l';
                 playerSpriteRenderer.flipX = true;
@@ -151,6 +167,7 @@ public class GridPlayerMovment : MonoBehaviour
                 if (Keyboard.current.wKey.isPressed)
                 {
                     Iam_i_moving = true;
+                    idel_checkt = false;
 
                     vertical = 1f;
                     Derecshen = 'b';
@@ -171,6 +188,7 @@ public class GridPlayerMovment : MonoBehaviour
                 else if (Keyboard.current.sKey.isPressed)
                 {
                     Iam_i_moving = true;
+                    idel_checkt = false;
 
                     vertical = -1f;
                     Derecshen = 'f';
@@ -201,7 +219,7 @@ public class GridPlayerMovment : MonoBehaviour
             {
                 if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, vertical, 0f), .2f, whatStopsMovement))
                 {
-                    movePoint.position += new Vector3(0f, vertical, 0f);
+                    movePoint.position += new Vector3(0f, vertical, 0f); 
                 }
             }
         }
