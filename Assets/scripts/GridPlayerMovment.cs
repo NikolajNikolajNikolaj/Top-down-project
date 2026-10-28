@@ -76,8 +76,7 @@ public class GridPlayerMovment : MonoBehaviour
         float horizontal = 0f;
         float vertical = 0f;
 
-        // Reset movement flag if we have arrived exactly at the move point
-        if (transform.position == movePoint.position)
+        if (transform.position == movePoint.position) // reset movment wen we at point
         {
             Iam_i_moving = false;
         }

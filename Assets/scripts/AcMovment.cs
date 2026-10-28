@@ -1,101 +1,123 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class AcMovment : MonoBehaviour
 {
-    public float movespeed = 1f;
+    public float movespeed = 5f; 
     public Transform movePoint;
     public LayerMask whatStopsMovement;
-    public Animator anim;
+    public string targetTag = "Player"; // The tag of Box_player
 
-    float horizontal = 0f;
-    float vertical = 0f;
+    private bool isMovingBox = false; // is moving box yes or no
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void Start()
     {
-        switch (gameObject.name) 
+        movePoint.parent = null; // just like in the player
+    }
+
+    void Update()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, movespeed * Time.deltaTime);  // move towords nicele
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        
+        if (collision.gameObject.CompareTag(targetTag)) //is player?
         {
-            case "Top":
-                Debug.Log("iteract top");
-                IteractTopCollision(other);
-                break;
+            
+            if (Vector3.Distance(transform.position, movePoint.position) > .05f) return; // complet movment?
 
-            case "Botem":
-                Debug.Log("iteract botem");
-                IteractBotemCollision(other);
-                break;
+            
+            Animator playerAnim = collision.gameObject.GetComponent<Animator>(); // anmamater ofr player
 
-            case "Left":
-                Debug.Log("iteract left");
-                IteractLeftCollision(other);
-                break;
-
-            case "Rithe":
-                Debug.Log("iteract rithe");
-                IteractRitheCollision(other);
-                break;
+            if (playerAnim != null && !isMovingBox)
+            {
+                
+                if (playerAnim.GetCurrentAnimatorStateInfo(0).IsName("Interact_Box")) //is anmashen playd
+                {
+                    Debug.Log("interacting");
+                    StartCoroutine(MoveBoxWithDelay(collision));
+                }
+            }
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    
+    private IEnumerator MoveBoxWithDelay(Collision2D collision) // after anmashen
     {
-        Debug.Log("on start");
-        movePoint.parent = null;
+        isMovingBox = true;
 
-        anim = gameObject.GetComponent<Animator>();
-    }
+       
+        yield return new WaitForSeconds(0.2f); // wait a second!!!!!!!!!!!!!!!!!!!!!
 
-    // Update is called once per frame
-    void Update()
-    {
-        horizontal = 0f;
-        vertical = 0f;
+        
+        Vector2 collisionNormal = collision.contacts[0].normal; // what side olso you wond beleve me that i used 4 difrent coliders befro just waching a video on how its dun i fell stuped :(
 
-        if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
+        
+        if (Mathf.Abs(collisionNormal.x) > Mathf.Abs(collisionNormal.y)) // horesontal movment
         {
-            // grid movment
-            if (horizontal != 0f)
+            if (collisionNormal.x < -0.5f) // left
             {
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(horizontal, 0f, 0f), .2f, whatStopsMovement))
-                {
-                    movePoint.position += new Vector3(horizontal, 0f, 0f);
-                    Debug.Log("horizontal movment ");
-                }
+                MoveLeft();
             }
-            if (vertical != 0f)
+            else if (collisionNormal.x > 0.5f) // rith
             {
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, vertical, 0f), .2f, whatStopsMovement))
-                {
-                    movePoint.position += new Vector3(0f, vertical, 0f);
-                    Debug.Log("vertical movment ");
-                }
+                MoveRight();
             }
         }
         
+        else // vertical movment
+        {
+            if (collisionNormal.y < -0.5f) // down
+            {
+                MoveDown();
+            }
+            else if (collisionNormal.y > 0.5f) // up 
+            {
+                MoveUp();
+            }
+        }
+
+        
+        yield return new WaitForSeconds(0.5f); // stop you from oving it instentle
+        isMovingBox = false; // ot moving
     }
 
+    private void MoveLeft()
+    { 
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, 0f, 0f), .2f, whatStopsMovement))
+        {
+            Debug.Log("AC left"); 
+            movePoint.position += new Vector3(-1f, 0f, 0f);
+        }
+    }
 
-    private void IteractTopCollision(Collider2D other)
-    {
-        vertical = 1f;
-        Debug.Log("Sucsess");
+    private void MoveRight() 
+    { 
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, 0f, 0f), .2f, whatStopsMovement))
+        {
+            Debug.Log("AC rithe"); 
+            movePoint.position += new Vector3(1f, 0f, 0f);
+        }
     }
-    private void IteractBotemCollision(Collider2D other)
+
+    private void MoveUp()    
     {
-        vertical = -1f;
-        Debug.Log("Sucsess");
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1f, 0f), .2f, whatStopsMovement))
+        {
+            Debug.Log("AC Up");    
+            movePoint.position += new Vector3(0f, 1f, 0f);
+        }
     }
-    private void IteractLeftCollision(Collider2D other)
-    {
-        horizontal = -1f;
-        Debug.Log("Sucsess");
-    }
-    private void IteractRitheCollision(Collider2D other) 
-    {
-        horizontal = 1f;
-        Debug.Log("Sucsess");
+
+    private void MoveDown()  
+    { 
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, -1f, 0f), .2f, whatStopsMovement))
+        {
+            Debug.Log("AC Down");   
+            movePoint.position += new Vector3(0f, -1f, 0f);
+        }
     }
 }
