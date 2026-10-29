@@ -9,15 +9,31 @@ public class AcMovment : MonoBehaviour
     public LayerMask whatStopsMovement;
     public string targetTag = "Player"; // The tag of Box_player
 
+    private Animator TheACAnim;
+
+    public int HPAC = 3; // the HP of the AC
+    private bool isDead = false;
+
     private bool isMovingBox = false; // is moving box yes or no
 
     void Start()
     {
+        TheACAnim = TheAC.GetComponent<Animator>();
         movePoint.parent = null; // just like in the player
     }
 
     void Update()
     {
+        if(!isDead)
+        {
+            if(HPAC <= 0)
+            {
+                isDead = true;
+                TheACAnim.SetTrigger("AC_Die");
+                float animationLength = brickAnim.GetCurrentAnimatorStateInfo(0).length;
+                Destroy(gameObject, animationLength*2f);
+            }
+        }
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, movespeed * Time.deltaTime);  // move towords nicele
     }
 

@@ -4,44 +4,30 @@ using UnityEngine;
 
 public class PitFall : MonoBehaviour
 {
-    public string targetTag = "AC"; // Tag attached to your moving box
-    
-    [Header("AC Components")]
-    public GameObject TheAC;          // Drag your Box GameObject here
-    private Animator TheACAnim;       // Will store the Box's Animator component
+    public string targetTag = "AC"; // the tag of the AC
+    public GameObject TheAC;         // add the AC object 
+    private Animator TheACAnim;       // anamater ofr AC
+    public float howclose = 0.2f; // the distens from the senter of pit 
 
-    [Header("Alignment Settings")]
-    [Tooltip("How close to the center of the pit must the box be before falling?")]
-    public float fallDistanceThreshold = 0.2f; 
-
-    private bool hasFallen = false;  // Prevents the script from running multiple times
+    private bool hasFallen = false;  // is it dead yet?
 
     void Start()
     {
-        if (TheAC != null)
-        {
-            TheACAnim = TheAC.GetComponent<Animator>();
-        }
-        else
-        {
-            Debug.LogError("ERROR: You forgot to drag your AC GameObject into 'The AC' slot on the PitFall script!", this);
-        }
+        TheACAnim = TheAC.GetComponent<Animator>();
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)// pic ecolocater
     {
-        if (hasFallen) return;
+        if (hasFallen) return; // FALL true ?
 
-        if (other.CompareTag(targetTag))
+        if (other.CompareTag(targetTag)) // is it the AC
         {
-            // Calculate the distance between the Box's center and the Pit's center
-            float distanceToCenter = Vector2.Distance(other.transform.position, transform.position);
+            float distanceToCenter = Vector2.Distance(other.transform.position, transform.position); // the AC center and pit center distens
 
-            // ONLY drop the box if it has slid close enough to the center of the pit
-            if (distanceToCenter <= fallDistanceThreshold)
+            if (distanceToCenter <= howclose) // FALL IF close
             {
-                Debug.Log("AC perfectly centered! Dropping the AC.");
-                StartCoroutine(ACFallSequence());
+                Debug.Log("DEPLOY THE AC");
+                StartCoroutine(ACFallSequence());//AC fall
             }
         }
     }
@@ -49,19 +35,9 @@ public class PitFall : MonoBehaviour
     private IEnumerator ACFallSequence()
     {
         hasFallen = true;
-
-        // Snap the AC's final position perfectly to the center of the pit tile so the animation looks flawless
-        TheAC.transform.position = transform.position;
-
-        // Play the falling animation
-        if (TheACAnim != null)
-        {
-            TheACAnim.SetTrigger("AC_fall");
-        }
-
-        // Wait for the animation to finish playing (Adjust 1.0f to match your animation's length)
-        yield return new WaitForSeconds(1.0f);
-
+        TheAC.transform.position = transform.position; // was off so not enemore
+        TheACAnim.SetTrigger("AC_fall"); // play the anamashen
+        yield return new WaitForSeconds(1.0f); // befor destrucshen
         Destroy(TheAC);
         Debug.Log("AC destroyed!");
     }
