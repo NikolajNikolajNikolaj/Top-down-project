@@ -16,7 +16,7 @@ public class PitFall : MonoBehaviour
         TheACAnim = TheAC.GetComponent<Animator>();
     }
 
-    private void OnTriggerStay2D(Collider2D other)// pic ecolocater
+    private void OnTriggerStay2D(Collider2D other)// epic ecolocater
     {
         if (hasFallen) return; // FALL true ?
 

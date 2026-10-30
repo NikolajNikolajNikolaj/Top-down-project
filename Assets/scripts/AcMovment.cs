@@ -18,7 +18,7 @@ public class AcMovment : MonoBehaviour
 
     void Start()
     {
-        TheACAnim = TheAC.GetComponent<Animator>();
+        TheACAnim = gameObject.GetComponent<Animator>();
         movePoint.parent = null; // just like in the player
     }
 
@@ -30,16 +30,18 @@ public class AcMovment : MonoBehaviour
             {
                 isDead = true;
                 TheACAnim.SetTrigger("AC_Die");
-                float animationLength = brickAnim.GetCurrentAnimatorStateInfo(0).length;
-                Destroy(gameObject, animationLength*2f);
             }
+        }
+        else if (!TheACAnim.GetCurrentAnimatorStateInfo(0).IsName("AC_Die"))
+        {
+            TheACAnim.SetTrigger("AC_Die");
         }
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, movespeed * Time.deltaTime);  // move towords nicele
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        
+        if (isDead) return;
         if (collision.gameObject.CompareTag(targetTag)) //is player?
         {
             
@@ -59,7 +61,6 @@ public class AcMovment : MonoBehaviour
             }
         }
     }
-
     
     private IEnumerator MoveBoxWithDelay(Collision2D collision) // after anmashen
     {

@@ -17,6 +17,16 @@ public class movmentForQube : MonoBehaviour
     private bool Iam_i_moving = false;
     private bool Iam_idel = false;
 
+    public int HP_player = 3; // the HP of the AC
+    public int PlayerLives = 3;
+    private bool isDead = false;
+
+    public float respon_x;
+    public float respon_y;
+
+    float horizontal = 0f;
+    float vertical = 0f;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,6 +36,24 @@ public class movmentForQube : MonoBehaviour
         movePoint.parent = null;
 
         anim = gameObject.GetComponent<Animator>();
+    }
+
+
+    private void  Respon() 
+    { 
+        horizontal = 0f;
+        vertical = 0f;
+        
+        Vector3 spawnPos = new Vector3(respon_x, respon_y, 0f); // this is were you and the pointer respon
+        
+        
+        transform.position = spawnPos; // teleport palyer
+        movePoint.position = spawnPos; // teleport pointer 
+
+        came.position = new Vector3(spawnPos.x, spawnPos.y, -10f);
+
+        Iam_i_moving = false;
+        Iam_idel = true;
     }
 
     private void ResetAllAnimationBools() // this is temperere
@@ -48,8 +76,31 @@ public class movmentForQube : MonoBehaviour
 
     void Update()
     {
-        float horizontal = 0f;
-        float vertical = 0f;
+        if(!isDead)
+        {
+            if(HP_player <= 0)
+            {
+                if(PlayerLives <= 0)
+                {
+                    isDead = true;
+                    anim.SetTrigger("Die_box");
+                    float animationLength = anim.GetCurrentAnimatorStateInfo(0).length;
+                    Destroy(gameObject, animationLength*2f);
+                    //need to restet level
+                }
+                else
+                {
+                    //need to create dead body
+                    anim.SetTrigger("Die_box");
+                    PlayerLives--;
+                    HP_player = 3;
+                    Respon();
+                }
+            }
+        }
+
+        horizontal = 0f;
+        vertical = 0f;
 
         // reset movment if we rech the point
         if (transform.position == movePoint.position)
@@ -126,8 +177,7 @@ public class movmentForQube : MonoBehaviour
             if (horizontal != 0f)
             {
                 if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(horizontal, 0f, 0f), .2f, whatStopsMovement))
-                { // the resen i plaset the camera in here was becus i whantet do mack that wen the box moves it rotats left then rithe wen moving but for some resn it rotesta the camera to so fuck that 
-                    came.position += new Vector3(horizontal, 0f, 0f);  // cudent figer out how to have the camera move slowle so insted we have a moshen sikness macker
+                { 
                     movePoint.position += new Vector3(horizontal, 0f, 0f);
                     Debug.Log("horizontal movment ");
                 }
@@ -136,11 +186,17 @@ public class movmentForQube : MonoBehaviour
             {
                 if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, vertical, 0f), .2f, whatStopsMovement))
                 {
-                    came.position += new Vector3(0f, vertical, 0f);  // cudent figer out how to have the camera move slowle so insted we have a moshen sikness macker
                     movePoint.position += new Vector3(0f, vertical, 0f);
                     Debug.Log("vertical movment ");
                 }
             }
+
+            // you wont beleve it wile wocking a nuther video i found a sulushen to my camera problem from erelear
+            // olso the camera onle folows you wen you stop it more suted for a open world then a puzel game but watever it looks good
+            Vector3 targetCameraPos = new Vector3(movePoint.position.x, movePoint.position.y, -10f);
+            came.position = Vector3.MoveTowards(came.position, targetCameraPos, movespeed * Time.deltaTime * 0.5f);
+            
+
         }
     }
 
